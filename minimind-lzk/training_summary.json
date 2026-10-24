@@ -1,0 +1,59 @@
+{
+  "status": "completed",
+  "started_at": "2026-10-24T23:00:26+08:00",
+  "initialization": "Fresh LoRA from original MiniMind-3 product weights; no checkpoint resume",
+  "samples": 8000,
+  "epochs": 1,
+  "batch_size": 1,
+  "accumulation_steps": 16,
+  "max_seq_len": 340,
+  "learning_rate": 0.0001,
+  "dtype": "bfloat16",
+  "base_weight": "base/minimind3_base_768.pth",
+  "data_path": "dataset/train.jsonl",
+  "data_sha256": "d5543a051a642c4e1d532b039464da0960c486b0f4a8d89af346c60c6136fffe",
+  "swanlab_url": "https://swanlab.cn/@COCO-19622/minimind-lzk/runs/9t8s85ok",
+  "run_directory": "logs/retrain_8000_20261024_230021",
+  "weights_in_git": false,
+  "independent_quality_evaluation": false,
+  "training_batches": 8000,
+  "optimizer_steps": 500,
+  "duration_seconds": 391.18,
+  "final_batch_loss": 4.0772,
+  "final_batch_loss_is_evaluation": false,
+  "base_sha256": "a5e8368a076ea4792d9e39b1b8fc903307dcc3bdc88dc38f674da33d8412fa39",
+  "artifacts": {
+    "adapter": {
+      "sha256": "98f3a55426d412c4e053e702290b379ff83708b576956138ae58d93c2b430d07",
+      "bytes": 797657
+    },
+    "model": {
+      "sha256": "8ed9f95c4fbe75d8f2fee2d4b7c996c3e6818039049e5fddc173ff008044cc9d",
+      "bytes": 138482390
+    },
+    "resume": {
+      "sha256": "4b7b026165115e4fa2135d22a95ea1582d19ba60b58479ed4b361c9f06683f74",
+      "bytes": 141658717
+    }
+  },
+  "checks": {
+    "base_weights_unchanged": true,
+    "all_weights_finite": true,
+    "adapter_matches_full_checkpoint": true,
+    "epoch": 0,
+    "step": 8000,
+    "optimizer_step_count": 500,
+    "old_2000_model_replaced": true
+  },
+  "torch_version": "2.9.0+cu130",
+  "finished_at": "2026-10-24T23:06:57+08:00",
+  "swanlab_uploaded_records": 5050,
+  "training_stderr_bytes": 0,
+  "smoke_test": {
+    "device": "cuda:0",
+    "strict_load_and_generate_passed": true,
+    "prompt": "什么是无人机的失控保护？",
+    "output": "无人机的失控保护是其自主飞行控制系统。",
+    "domain_accuracy_evaluated": false
+  }
+}

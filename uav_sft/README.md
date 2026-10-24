@@ -1,6 +1,6 @@
 # 无人机中文 SFT 试验数据
 
-交付文件：[train.jsonl](../train.jsonl)，位于 `C:\LLM\train.jsonl`。整理日期：2026-10-24。
+当前训练文件：[train.jsonl](../minimind-lzk/dataset/train.jsonl)，已扩展为 8000 条，直接适配 MiniMind SFT 加载器。整理日期：2026-10-24。下文记录最初 2000 条数据的生成过程；根目录的旧格式文件已移除，原始问答保存在 [train.before_expand_2000.jsonl](../minimind-lzk/dataset/train.before_expand_2000.jsonl)。扩展过程见 [expansion_notes.md](../minimind-lzk/dataset/expansion_notes.md)。
 
 ## 数量与格式
 

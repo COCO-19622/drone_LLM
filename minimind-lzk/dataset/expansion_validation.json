@@ -1,0 +1,65 @@
+{
+  "path": "C:\\LLM\\minimind-lzk\\dataset\\train.jsonl",
+  "backup": "C:\\LLM\\minimind-lzk\\dataset\\train.before_expand_2000.jsonl",
+  "original_count": 2000,
+  "added_count": 6000,
+  "final_count": 8000,
+  "preserved_original_count": 2000,
+  "category_counts": {
+    "工程知识": 800,
+    "任务规划与步骤分解": 1600,
+    "自主飞行场景判断": 2400,
+    "无人机基础知识": 2800,
+    "通用简单指令": 400
+  },
+  "new_family_counts": {
+    "concept_comparison": 900,
+    "concept_identification": 900,
+    "concept_misassignment_correction": 900,
+    "two_condition_scenario": 1800,
+    "two_constraint_plan": 1200,
+    "addition": 30,
+    "subtraction": 30,
+    "multiplication": 20,
+    "sort": 60,
+    "entity_extraction": 60,
+    "list_processing": 50,
+    "short_text_editing": 50
+  },
+  "checks": {
+    "all_json_parse": true,
+    "schema_and_roles": true,
+    "empty_fields": 0,
+    "exact_duplicate_samples": 0,
+    "normalized_duplicate_instructions": 0,
+    "conflicting_same_instruction": 0,
+    "replacement_or_control_characters": 0,
+    "plan_steps_min": 5,
+    "plan_steps_max": 8
+  },
+  "character_lengths": {
+    "question_max": 105,
+    "answer_max": 113,
+    "question_median": 47.0,
+    "answer_median": 43.0
+  },
+  "source_manifest": "C:\\LLM\\uav_sft\\sources.json",
+  "seed": 2026102408,
+  "original_sha256": "4f37b921cf6fa5ca947ec128d1ea00527a509e88fb1c190e0dd8b3476b694b92",
+  "expanded_sha256": "d5543a051a642c4e1d532b039464da0960c486b0f4a8d89af346c60c6136fffe",
+  "training_started": false,
+  "notes": [
+    "新增数据为现有文本知识的辨析与条件组合，不代表新增6000个独立知识点。",
+    "精确与规范化问题去重通过；未声称完成全部语义近似去重或专家认证。",
+    "未修改模型、训练参数或工作区根目录的旧版train.jsonl。"
+  ],
+  "actual_sft_validation": {
+    "samples": 8000,
+    "max_seq_len": 340,
+    "max_tokens": 193,
+    "max_tokens_with_checked_system_prompt": 211,
+    "truncated_rows": 0,
+    "invalid_or_zero_supervision_rows": 0,
+    "report": "C:\\LLM\\minimind-lzk\\dataset_validation.json"
+  }
+}

@@ -1,5 +1,9 @@
 # MiniMind 项目记忆
 
+- 2026-10-24 23:00–23:06：按用户明确授权，从原始MiniMind-3重新初始化LoRA，用8000条完成1轮（非resume）；batch1/累积16/长度340/lr1e-4/BF16，完成8000/8000 batch及500次优化器更新，用时391.18秒。SwanLab实验9t8s85ok：https://swanlab.cn/@COCO-19622/minimind-lzk/runs/9t8s85ok ，SDK确认上传5050条记录，错误日志为空。已验证冻结基础权重不变、全部权重有限、LoRA/完整权重/恢复状态一致，恢复状态epoch0/step8000；已覆盖活动adapter/checkpoints，并按用户“无需保留”删除旧的backup_completed_20261024_222400和backup_accidental_20261024_222128模型备份。最新LoRA SHA256=98f3a55426d412c4e053e702290b379ff83708b576956138ae58d93c2b430d07。训练明细见 ../minimind-lzk/training_summary.json，日志在logs/retrain_8000_20261024_230021/。最后单batch loss4.0772不是独立评估；GPU严格加载及单次生成检查通过（输出已记录在training_summary.json；不代表领域准确性）；当前未做独立质量评估。按用户授权发布本轮数据、来源与训练记录到GitHub，继续按仓库约定排除权重/日志；此前16张图片的LFS暂存变更不混入本次提交。
+
+- 2026-10-24：确认当前训练集已扩至8000条，扩展报告记载保留原2000条并增加6000条，实际SFT验证无截断或零监督。用户询问继续训练还是回到2000条训练前；建议从原始成品基础权重重新初始化LoRA，对完整8000条训练1轮，保留已完成2000条适配器及backup_completed_20261024_222400作为对照。理由：当前--resume恢复旧epoch/step及优化器，并按旧step跳过重新洗牌后的新数据，不适合直接接扩大数据集；新增6000条主要为已有知识的组合增强，效果需独立评估。此为建议，尚未执行重训、回滚或修改训练参数。
+
 - 2026-10-24：用户新增工作区根目录 `../train.jsonl`，2000 条 UTF-8 JSONL，字段 instruction/output；全量解析成功、无完全重复记录。按用户授权修复适配：保留根目录原件，逐条无损转换到 `../minimind-lzk/dataset/train.jsonl` 的 conversations/user/assistant 格式，匹配现有 lora_config.json，无需改训练代码。新增实验级 validate_dataset.py 和 dataset_validation.json，并更新 README。Windows .venv311 实际加载全部 2000 条、逐条生成训练张量通过；token 长度 min/median/p95/max 为 29/51/153/168，检查用 system 提示下最长186，低于340；无截断、无零监督样本，移位后有效监督最少3 token。train.py 配置展示确认实际路径 C:\LLM\minimind-lzk\dataset\train.jsonl。原件与转换版本内容逐条一致；以后修改原件不会自动同步。未启动训练；独立评估集仍未准备。
 
 - 2026-10-24：针对 8GB 显存与现有成品 MiniMind-3（约 63.91M 参数）的 LoRA 数据规模咨询，建议先用 1000–2000 条做流程与效果试验，再以 5000–10000 条高质量文本问答作为首轮正式规模；若独立评估持续改善再扩至 20000–30000 条。此为起步建议，未经本机训练验证，用户尚未确认执行。当前实验配置为 batch=1、累积16、长度340、1轮；真实训练集仍待准备。总样本数主要影响耗时，峰值显存需结合 batch、长度和实际运行测试判断；候选清单中的预训练文本与多模态轨迹不能直接计为可用文本 QA。未启动训练。
@@ -130,8 +134,8 @@ cd trainer && python train_full_sft.py
 
 - 工作区 C:\LLM；main，远端 https://github.com/COCO-19622/drone_LLM.git。Windows Git凭据可推送；GitHub连接器无push权限。原嵌套仓库记录在根 .git/nested-repositories/。
 - 成品基础模型 minimind-3；独立LoRA实验 minimind-lzk。Windows解释器 minimind/.venv311/Scripts/python.exe；GPU RTX5060 Laptop 8GB。模型权重、环境、检查点和日志不入Git。
-- 无人机训练集 minimind-lzk/dataset/train.jsonl，2000条，数据加载检查通过。最新完整训练2000/2000 batch，SwanLab https://swanlab.cn/@COCO-19622/minimind-lzk/runs/0ke35zqv 。LoRA在adapter/minimind-lzk_768.pth；完整备份在checkpoints/backup_completed_20261024_222400/，含校验清单。
-- 训练：在minimind-lzk目录执行 ..\minimind\.venv311\Scripts\python.exe -X utf8 train.py --start，从基础模型重训；--start --resume恢复。当前epochs=1已完成，继续训练需明确轮数。直接重训会覆盖活动权重，完成备份须保留。
+- 无人机训练集 minimind-lzk/dataset/train.jsonl，8000条，数据加载检查通过。最新从原始基础模型完整训练8000/8000 batch，SwanLab https://swanlab.cn/@COCO-19622/minimind-lzk/runs/9t8s85ok 。LoRA在adapter/minimind-lzk_768.pth；恢复检查点step8000。旧模型备份已按用户授权清理，源数据快照保留用于来源核对。
+- 训练：在minimind-lzk目录执行 ..\minimind\.venv311\Scripts\python.exe -X utf8 train.py --start，从基础模型重训；--start --resume恢复。当前epochs=1已完成，继续训练需明确轮数。直接重训会覆盖活动权重；用户已授权本次覆盖且无需保留2000条旧版本，该指令优先于此前保留备份的约定。
 - 推理：同目录执行 ..\minimind\.venv311\Scripts\python.exe -X utf8 chat.py，支持--prompt、--max-new-tokens、--device；默认每问独立、greedy、256token，与原eval_llm.py采样/8192token/打印方式不同。模型严格加载基础参数及匹配LoRA，GPU单问已实测成功。
 - 用户已知终端样式差异源于推理脚本，回答差异也受生成参数影响；公平对比需统一入口/模板/生成参数，仅切换LoRA。统一对比入口尚未实现，未作独立效果评估。
 - 本次按用户要求提交chat.py、README及本交接记录；原minimind-3/images的LFS暂存变更保留且不混入此提交。当前会话无可调用的压缩工具，交接已持久化，用户可通过客户端/compact压缩。
