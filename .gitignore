@@ -1,0 +1,40 @@
+# Python environments and caches
+.venv/
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.cache/
+
+# Local credentials and editor settings
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Model weights, checkpoints and generated training logs
+*.pth
+*.pt
+*.safetensors
+*.ckpt
+*.onnx
+*.bin
+checkpoints/
+adapter/
+out/
+logs/
+*.log
+swanlog/
+wandb/
+
+# Downloaded pretraining corpus (custom SFT JSONL files are versioned)
+minimind/dataset/pretrain_t2t_mini.jsonl
+
+# Preserve nested local Git metadata without publishing it
+**/.git/

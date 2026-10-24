@@ -1,0 +1,9 @@
+{
+  "model_name": "minimind-lzk",
+  "source": "../minimind-3",
+  "source_sha256": "3adf69402b5d22e693151cabadc12528f923c4ba6bf343738aaf13f0892162e8",
+  "strict_load": true,
+  "saved_weight_strict_reload": true,
+  "hf_native_max_logit_error": 0.0,
+  "training_started": false
+}

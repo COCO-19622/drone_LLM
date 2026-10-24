@@ -1,0 +1,120 @@
+{
+  "file": "C:\\LLM\\train.jsonl",
+  "date": "2026-10-24",
+  "encoding": "UTF-8 without BOM",
+  "total": 2000,
+  "category_counts": {
+    "无人机基础知识": 700,
+    "工程知识": 200,
+    "自主飞行场景判断": 600,
+    "任务规划与步骤分解": 400,
+    "通用简单指令": 100
+  },
+  "seed": 20261024,
+  "generation": {
+    "knowledge_cards": 140,
+    "engineering_cards": 40,
+    "scenario_seeds": 60,
+    "scenario_variants_per_seed": 10,
+    "plan_skeletons": 40,
+    "plan_constraints": 10
+  },
+  "checks": {
+    "json_parsing": "passed",
+    "schema": "passed",
+    "nonempty": "passed",
+    "exact_duplicates_removed": 0,
+    "remaining_exact_duplicates": 0,
+    "normalized_duplicate_instructions": 0,
+    "conflicting_same_instructions": 0,
+    "replacement_or_control_characters": 0,
+    "plan_steps_3_to_8": "passed",
+    "nonlist_answers_1_to_4_sentences": "passed"
+  },
+  "length_characters": {
+    "instruction_max": 84,
+    "instruction_median": 22.0,
+    "output_max": 96,
+    "output_median": 21.0
+  },
+  "most_common_identical_answers": [
+    {
+      "output": "25",
+      "count": 2
+    },
+    {
+      "output": "PX4需要持续确认外部控制源可用。",
+      "count": 2
+    },
+    {
+      "output": "23",
+      "count": 2
+    },
+    {
+      "output": "会影响状态更新及时性和链路负载。",
+      "count": 1
+    },
+    {
+      "output": "1. 起飞\n2. 飞向A点\n3. 飞向B点\n4. 确认位置有效并记录当前位置\n5. 返回起点\n6. 降落\n7. 确认已落地、解除解锁且电机停转",
+      "count": 1
+    },
+    {
+      "output": "1. 起飞\n2. 飞向A点\n3. 飞向B点\n4. 飞向C点\n5. 在允许条件下将机头转向目标\n6. 返回起点\n7. 降落\n8. 记录任务完成情况和异常",
+      "count": 1
+    },
+    {
+      "output": "不同，结果描述任务结束，遥测反映连续状态。",
+      "count": 1
+    },
+    {
+      "output": "不应继续非必要任务。限制等待与重试并评估结束任务。应依据仍有效的估计与控制能力选择可达的结束方式，避免长时间等待或勉强远距离返航。",
+      "count": 1
+    }
+  ],
+  "source_sample_counts": {
+    "mavlink": 440,
+    "safety": 345,
+    "mission": 585,
+    "return": 495,
+    "land": 445,
+    "preflight": 485,
+    "basic": 530,
+    "battery": 485,
+    "ekf": 630,
+    "hold": 420,
+    "actions": 40,
+    "position": 10,
+    "orientation": 70,
+    "collision": 210,
+    "slam": 25,
+    "vio": 100,
+    "external": 195,
+    "accel": 35,
+    "services": 15,
+    "controllers": 145,
+    "pid": 160,
+    "topics": 55,
+    "gyro": 30,
+    "actuators": 60,
+    "offboard": 100,
+    "nodes": 35,
+    "gps": 20,
+    "arming": 45,
+    "frames": 10,
+    "ros": 30,
+    "compass": 25,
+    "arduekf": 20,
+    "parameters": 15,
+    "simulation": 20,
+    "slamtoolbox": 5,
+    "flow": 20
+  },
+  "sha256": "108061a09acc41444632ecb4839fa54405592fcde462b0b0b09e0ea881ea015a",
+  "limitations": [
+    "Document-informed synthetic examples, not 2000 independent verified flight incidents.",
+    "No exhaustive semantic deduplication or expert validation; related concept facets remain.",
+    "Safety recommendations assume a small multirotor unless another vehicle is explicitly specified.",
+    "instruction/output requires mapping before the existing MiniMind conversations reader can load it.",
+    "No tokenizer statistics, model training or original sensor logs used."
+  ]
+}

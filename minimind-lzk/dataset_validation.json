@@ -1,0 +1,17 @@
+{
+  "data_path": "C:\\LLM\\minimind-lzk\\dataset\\train.jsonl",
+  "samples": 2000,
+  "max_seq_len": 340,
+  "tokens": {
+    "min": 29,
+    "median": 51,
+    "p95": 153,
+    "max": 168
+  },
+  "max_tokens_with_checked_system_prompt": 186,
+  "truncated_rows_without_system": [],
+  "rows_over_limit_with_checked_system_prompt": [],
+  "invalid_or_zero_supervision_rows": [],
+  "min_supervised_tokens_after_shift": 3,
+  "training_started": false
+}
