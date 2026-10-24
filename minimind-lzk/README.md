@@ -25,3 +25,14 @@ cd /d C:\LLM\minimind-lzk
 首次训练 SwanLab 实验：https://swanlab.cn/@COCO-19622/minimind-lzk/runs/v9fg4rsy 。训练完成 2000/2000 batch，SDK 确认上传 1300 条记录；环境元数据上传曾返回 525，未中断训练。训练效果仍需独立评估。
 
 2026-10-24 22:24 从基础模型重新训练完整 1 轮（2000/2000 batch），最新实验：https://swanlab.cn/@COCO-19622/minimind-lzk/runs/0ke35zqv 。SDK 确认上传完成。完成后的权重、恢复状态及配置已备份到 `checkpoints/backup_completed_20261024_222400/`，`manifest.json` 记录文件校验值；此目录不纳入 Git。
+
+## 启动已训练模型
+
+在 Windows CMD 中执行：
+
+```bat
+cd /d C:\LLM\minimind-lzk
+..\minimind\.venv311\Scripts\python.exe -X utf8 chat.py
+```
+
+该入口严格加载 base 下的基础模型，再加载 adapter 下的 LoRA 参数；仅推理，不训练。输入问题后回车，输入 `exit` 或 `quit` 退出；每次提问独立处理。单次提问可追加 `--prompt "什么是无人机的失控保护？"`，可用 `--max-new-tokens 128` 设置回答长度上限。

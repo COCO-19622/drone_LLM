@@ -123,3 +123,15 @@ cd trainer && python train_full_sft.py
 - 2026-10-24：按用户“重新训练一轮”要求，22:24使用原配置从成品基础模型启动（非resume），PID83008，完成2000/2000 batch；最终单batch loss1.1111，不代表独立评估。SwanLab新实验0ke35zqv，URL https://swanlab.cn/@COCO-19622/minimind-lzk/runs/0ke35zqv ，已打开浏览器；SDK确认上传1282条记录，错误日志为空。最新LoRA及恢复状态保存在原实验adapter/checkpoints目录，另已完整备份到 ../minimind-lzk/checkpoints/backup_completed_20261024_222400/（含配置与SHA256清单、训练数据校验值），备份内容校验一致。日志 ../minimind-lzk/logs/lora_20261024_222400.log。未提交或推送本次文件改动，未改动用户已有暂存内容。
 
 - 2026-10-24：用户要求将本轮训练更新上传GitHub；本次提交范围为 minimind-lzk/train.py 的布尔命令行参数支持、启用SwanLab的配置、训练完成及备份说明和项目记忆。模型权重/检查点继续仅存本地。既有 minimind-3/images 的LFS暂存变更保持原样，不纳入本次训练更新提交；同步状态以main/origin/main为准。
+
+- 2026-10-24：用户询问已训练模型启动方式。新增 ../minimind-lzk/chat.py，读取实验配置并严格加载基础模型，校验LoRA键集合后加载适配器；沿用基础模型分词器，GPU半精度/CPU单精度，流式输出，默认交互式独立问答、exit/quit退出，支持 --prompt/--max-new-tokens/--device，仅推理不改权重。Windows .venv311 GPU实测单次问题生成32token成功（不代表领域准确性验证）。命令：在 C:\LLM\minimind-lzk 执行 ..\minimind\.venv311\Scripts\python.exe -X utf8 chat.py。README已追加说明，本次未推送新入口。
+
+## 精简交接状态（2026-10-24）
+
+- 工作区 C:\LLM；main，远端 https://github.com/COCO-19622/drone_LLM.git。Windows Git凭据可推送；GitHub连接器无push权限。原嵌套仓库记录在根 .git/nested-repositories/。
+- 成品基础模型 minimind-3；独立LoRA实验 minimind-lzk。Windows解释器 minimind/.venv311/Scripts/python.exe；GPU RTX5060 Laptop 8GB。模型权重、环境、检查点和日志不入Git。
+- 无人机训练集 minimind-lzk/dataset/train.jsonl，2000条，数据加载检查通过。最新完整训练2000/2000 batch，SwanLab https://swanlab.cn/@COCO-19622/minimind-lzk/runs/0ke35zqv 。LoRA在adapter/minimind-lzk_768.pth；完整备份在checkpoints/backup_completed_20261024_222400/，含校验清单。
+- 训练：在minimind-lzk目录执行 ..\minimind\.venv311\Scripts\python.exe -X utf8 train.py --start，从基础模型重训；--start --resume恢复。当前epochs=1已完成，继续训练需明确轮数。直接重训会覆盖活动权重，完成备份须保留。
+- 推理：同目录执行 ..\minimind\.venv311\Scripts\python.exe -X utf8 chat.py，支持--prompt、--max-new-tokens、--device；默认每问独立、greedy、256token，与原eval_llm.py采样/8192token/打印方式不同。模型严格加载基础参数及匹配LoRA，GPU单问已实测成功。
+- 用户已知终端样式差异源于推理脚本，回答差异也受生成参数影响；公平对比需统一入口/模板/生成参数，仅切换LoRA。统一对比入口尚未实现，未作独立效果评估。
+- 本次按用户要求提交chat.py、README及本交接记录；原minimind-3/images的LFS暂存变更保留且不混入此提交。当前会话无可调用的压缩工具，交接已持久化，用户可通过客户端/compact压缩。
