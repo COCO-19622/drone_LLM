@@ -6,6 +6,37 @@
 
 本文件只记录 `/mnt/c/LLM/minimind` 项目的信息。以下内容依据当前仓库文件整理；未实际运行的命令不代表已验证。
 
+## GitHub 推送问题与解决方法（2026-10-24）
+
+- 已确认的问题：GitHub 连接器没有目标仓库的 push 权限。连接器权限与 Windows Git 登录凭据是两套机制；此次已通过 Windows Git 凭据成功推送。其他具体报错及失败命令未保存在当前项目记录中，待确认，不推断为网络、代理或证书故障。
+- 后续推送优先沿用 Windows Git 和已有凭据。当前为 WSL 环境，已确认 Windows Git 位于 `/mnt/c/Program Files/Git/cmd/git.exe`；不能假设 WSL 原生 `git` 自动复用 Windows 凭据。不要把令牌写入远端 URL、脚本或记忆文件。
+- 仓库根目录为 `C:\LLM`（WSL：`/mnt/c/LLM`），远端为 `https://github.com/COCO-19622/drone_LLM.git`，分支 `main` 已跟踪 `origin/main`。以后正常提交、推送，不重复初始化仓库；原内嵌 Git 元数据备份在根 `.git/nested-repositories/`，不要恢复到源码目录或误建子模块。
+
+Windows CMD 操作示例（按任务替换暂存文件列表与提交消息，先检查差异再提交）：
+
+```bat
+cd /d C:\LLM
+git status --short --branch
+git remote -v
+git add minimind/docs/project-memory.md
+git diff --cached --stat
+git diff --cached
+git commit -m "docs: record GitHub push troubleshooting"
+git push origin main
+git fetch origin
+git status --short --branch
+git rev-parse HEAD
+git rev-parse origin/main
+```
+
+- 若 Windows CMD 找不到 `git`，使用 `"C:\Program Files\Git\cmd\git.exe"`。
+- 在 WSL 中推送使用：`"/mnt/c/Program Files/Git/cmd/git.exe" -C C:/LLM push origin main`。其他远端操作也可沿用该前缀，明确使用 Windows Git；如提示登录，使用正常登录流程，不输出或索取明文令牌。
+- 验证标准：push 成功退出，随后 fetch 成功，且 `HEAD` 与 `origin/main` 的提交 ID 相同。仅查看本地 `origin/main` 可能得到缓存状态，不能据此断言远端已经更新。本次补记前本地两者均为 `517c1d0`；本次未联网核验远端。
+- 若再次失败，保留脱敏后的完整报错，先区分权限、认证、网络或远端分支变更。遇到 non-fast-forward 先 fetch 并检查分支差异，再决定合并或变基，不直接强推；不因推送失败关闭 TLS 证书校验。
+- 推送前检查暂存差异和根 `.gitignore`，避免纳入虚拟环境、凭据、模型权重、检查点、日志和大型预训练语料；自定义 SFT JSONL 按项目约定纳入版本控制。
+- 本次仅更新记忆文件，未执行上述提交、fetch 或 push 命令。
+- 2026-10-24：用户反馈 VS Code 源代码管理仍显示 10k+。现场核查根仓库仅跟踪139文件，WSL Git 仅报告本记忆文件修改；Windows Git 另报告16张图片修改（原因尚未核实），均未复现10k+。虚拟环境和权重的忽略规则实际生效；四层目录检查仅发现根 `.git`。可能是 VS Code 保留旧内嵌仓库状态或打开其他仓库，需在界面重载窗口并检查仓库列表确认，不将猜测当作已确认原因；不要为清除计数执行全部提交或丢弃更改。
+
 ## 项目用途
 
 MiniMind 是用于学习和复现小型语言模型的开源项目，覆盖分词器、从零预训练、监督微调、LoRA、偏好优化、强化学习、蒸馏及推理示例。当前仓库包含 MiniMind-3 的模型配置和本地 Transformers 格式模型目录 `minimind-3/`。
@@ -84,3 +115,11 @@ cd trainer && python train_full_sft.py
 - 2026-10-23：已按当前磁盘状态梳理项目框架：仓库 out/、checkpoints/ 为空；成品 Transformers 权重在 minimind-3/model.safetensors，配置 768 维、8 层、8 个 Q 头、4 个 KV 头、词表 6400。eval_llm.py 用 --load_from 切换模型目录，原生权重用 --save_dir/--weight；加载分支实际以路径是否包含字符串 model 判断。--open_thinking 0/1 控制聊天模板思考开关，没有独立高/中/低推理强度参数；hidden_size/层数/MoE 必须匹配权重，不能直接调参提升已有模型。独立 minimind-lzk 实验仍只有基础模型和格式示例，真实 train.jsonl 未准备。本次仅检查文件并说明，未启动训练或推理。
 
 - 2026-10-24：按用户要求在工作区根目录建立 drone_LLM Git 仓库（main），目标远端 https://github.com/COCO-19622/drone_LLM.git；原内嵌仓库 Git 元数据已保存在根 .git/nested-repositories/，使源码以普通目录纳入根仓库，未创建子模块。根 .gitignore 排除虚拟环境、所有模型权重、检查点、日志、凭据文件和大型预训练语料；纳入无人机 SFT 数据及来源材料、minimind-lzk 配置和脚本。提交前候选139文件约37.75 MiB，未发现超过10 MiB的单文件，常见令牌/私钥模式检查未发现匹配。GitHub 连接器无 push 权限，但已通过 Windows Git 凭据成功推送 main，并设置 origin/main 跟踪；首次提交 fbd02e6，共139文件。根仓库位于 C:\LLM，原 minimind 与 minimind-3 的 Git 元数据保存在根 .git/nested-repositories/。
+
+- 2026-10-24：按用户要求已执行 minimind-lzk/train.py --start 完成 LoRA 训练并启用 SwanLab。训练前实际数据加载器复核2000样本通过，无截断或零监督样本；配置1轮、batch1、累积16、长度340、lr1e-4。启动器已支持JSON布尔配置，use_wandb=true 实际导入 swanlab；Windows UTF-8 后台启动PID60840。训练完成2000/2000 batch，最终单batch loss=1.1111（非评估结果），SDK确认Upload complete:1300 records；环境元数据上传曾报525，不影响训练完成。实验URL https://swanlab.cn/@COCO-19622/minimind-lzk/runs/v9fg4rsy ，已调用Windows默认浏览器打开。LoRA在 ../minimind-lzk/adapter/minimind-lzk_768.pth（约779KiB），恢复状态在该实验checkpoints下；日志 ../minimind-lzk/logs/lora_20261024_221219.log 与 _error.log，错误日志为空。未合并模型或进行独立效果评估，未提交/推送本次改动；用户已有其他暂存改动未触碰。
+
+- 2026-10-24：用户误执行训练后请求判断能否回溯。Windows进程检查无 train.py/train_lora.py 运行；当前LoRA、完整权重、恢复检查点均于22:21:28被覆盖。实际加载恢复状态为epoch0/step100、SwanLab ID48oue8v3，与原已完成step2000/v9fg4rsy不同。工作区检查未发现旧权重副本或.tmp；两次SwanLab本地目录仅有指标与环境元数据，没有模型权重，Git亦排除权重，无法从已查来源直接回滚原数值。当前有效权重及恢复文件已备份到 ../minimind-lzk/checkpoints/backup_accidental_20261024_222128/，未删除或替换。基础模型保持完好，可按原数据配置重新执行完整1轮重现训练流程，但不能保证逐字节相同。本次未重训、未改训练代码，未把step100称为已完成模型。
+
+- 2026-10-24：按用户“重新训练一轮”要求，22:24使用原配置从成品基础模型启动（非resume），PID83008，完成2000/2000 batch；最终单batch loss1.1111，不代表独立评估。SwanLab新实验0ke35zqv，URL https://swanlab.cn/@COCO-19622/minimind-lzk/runs/0ke35zqv ，已打开浏览器；SDK确认上传1282条记录，错误日志为空。最新LoRA及恢复状态保存在原实验adapter/checkpoints目录，另已完整备份到 ../minimind-lzk/checkpoints/backup_completed_20261024_222400/（含配置与SHA256清单、训练数据校验值），备份内容校验一致。日志 ../minimind-lzk/logs/lora_20261024_222400.log。未提交或推送本次文件改动，未改动用户已有暂存内容。
+
+- 2026-10-24：用户要求将本轮训练更新上传GitHub；本次提交范围为 minimind-lzk/train.py 的布尔命令行参数支持、启用SwanLab的配置、训练完成及备份说明和项目记忆。模型权重/检查点继续仅存本地。既有 minimind-3/images 的LFS暂存变更保持原样，不纳入本次训练更新提交；同步状态以main/origin/main为准。

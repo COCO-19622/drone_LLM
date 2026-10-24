@@ -27,7 +27,11 @@ def main():
     trainer = ROOT.parent / "minimind" / "trainer"
     command = [sys.executable, "-X", "utf8", "-u", str(trainer / "train_lora.py")]
     for key, value in config.items():
-        command.extend(["--" + key, str(value)])
+        if isinstance(value, bool):
+            if value:
+                command.append("--" + key)
+        else:
+            command.extend(["--" + key, str(value)])
     subprocess.run(command, cwd=trainer, check=True)
 
 

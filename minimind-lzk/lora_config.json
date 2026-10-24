@@ -19,5 +19,6 @@
   "log_interval": 10,
   "save_interval": 100,
   "use_compile": 0,
-  "wandb_project": "minimind-lzk"
+  "wandb_project": "minimind-lzk",
+  "use_wandb": true
 }
